@@ -1,0 +1,16 @@
+use strict;
+use Test::More tests => 11;
+
+BEGIN {
+    use_ok 'WebService::Backlog';
+    use_ok 'WebService::Backlog::Comment';
+    use_ok 'WebService::Backlog::Component';
+    use_ok 'WebService::Backlog::Issue';
+    use_ok 'WebService::Backlog::IssueType';
+    use_ok 'WebService::Backlog::Priority';
+    use_ok 'WebService::Backlog::Project';
+    use_ok 'WebService::Backlog::Resolution';
+    use_ok 'WebService::Backlog::Status';
+    use_ok 'WebService::Backlog::User';
+    use_ok 'WebService::Backlog::Version';
+}
