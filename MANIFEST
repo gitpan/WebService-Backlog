@@ -13,12 +13,16 @@ inc/Test/More.pm
 lib/WebService/Backlog.pm
 lib/WebService/Backlog/Comment.pm
 lib/WebService/Backlog/Component.pm
+lib/WebService/Backlog/CreateIssue.pm
+lib/WebService/Backlog/FindCondition.pm
 lib/WebService/Backlog/Issue.pm
 lib/WebService/Backlog/IssueType.pm
 lib/WebService/Backlog/Priority.pm
 lib/WebService/Backlog/Project.pm
 lib/WebService/Backlog/Resolution.pm
 lib/WebService/Backlog/Status.pm
+lib/WebService/Backlog/SwitchStatus.pm
+lib/WebService/Backlog/UpdateIssue.pm
 lib/WebService/Backlog/User.pm
 lib/WebService/Backlog/Version.pm
 Makefile.PL
@@ -32,3 +36,5 @@ t/03_get_components.t
 t/04_get_versions.t
 t/05_get_users.t
 t/06_get_issue.t
+t/07_count_issue.t
+t/08_find_issue.t

@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 11;
+use Test::More tests => 15;
 
 BEGIN {
     use_ok 'WebService::Backlog';
@@ -13,4 +13,9 @@ BEGIN {
     use_ok 'WebService::Backlog::Status';
     use_ok 'WebService::Backlog::User';
     use_ok 'WebService::Backlog::Version';
+    use_ok 'WebService::Backlog::FindCondition';
+
+    use_ok 'WebService::Backlog::CreateIssue';
+    use_ok 'WebService::Backlog::UpdateIssue';
+    use_ok 'WebService::Backlog::SwitchStatus';
 }

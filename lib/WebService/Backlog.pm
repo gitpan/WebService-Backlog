@@ -1,7 +1,7 @@
 package WebService::Backlog;
 
 use strict;
-our $VERSION = '0.01_01';
+our $VERSION = '0.01_02';
 
 use RPC::XML::Client;
 use Carp;
@@ -11,6 +11,11 @@ use WebService::Backlog::Component;
 use WebService::Backlog::Version;
 use WebService::Backlog::User;
 use WebService::Backlog::Issue;
+use WebService::Backlog::FindCondition;
+
+use WebService::Backlog::CreateIssue;
+use WebService::Backlog::UpdateIssue;
+use WebService::Backlog::SwitchStatus;
 
 sub new {
     my ( $class, %args ) = @_;
@@ -44,7 +49,7 @@ sub getProjects {
 
 sub getProject {
     my ( $self, $keyOrId ) = @_;
-    croak "Project key or ID must be specified." unless ($keyOrId);
+    croak "key or projectId must be specified." unless ($keyOrId);
     my $req = RPC::XML::request->new( 'backlog.getProject', $keyOrId, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getProject : " . $res->value->{faultString}
@@ -55,7 +60,7 @@ sub getProject {
 
 sub getComponents {
     my ( $self, $pid ) = @_;
-    croak "Project ID must be specified." unless ($pid);
+    croak "projectId must be specified." unless ($pid);
     my $req = RPC::XML::request->new( 'backlog.getComponents', $pid, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getComponents : " . $res->value->{faultString}
@@ -69,7 +74,7 @@ sub getComponents {
 
 sub getVersions {
     my ( $self, $pid ) = @_;
-    croak "Project ID must be specified." unless ($pid);
+    croak "projectId must be specified." unless ($pid);
     my $req = RPC::XML::request->new( 'backlog.getVersions', $pid, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getVersions : " . $res->value->{faultString}
@@ -83,7 +88,7 @@ sub getVersions {
 
 sub getUsers {
     my ( $self, $pid ) = @_;
-    croak "Project ID must be specified." unless ($pid);
+    croak "projectId must be specified." unless ($pid);
     my $req = RPC::XML::request->new( 'backlog.getUsers', $pid, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getUsers : " . $res->value->{faultString}
@@ -97,7 +102,7 @@ sub getUsers {
 
 sub getIssue {
     my ( $self, $keyOrId ) = @_;
-    croak "Issue key or ID must be specified." unless ($keyOrId);
+    croak "key or issueId must be specified." unless ($keyOrId);
     my $req = RPC::XML::request->new( 'backlog.getIssue', $keyOrId, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getIssue : " . $res->value->{faultString}
@@ -108,7 +113,7 @@ sub getIssue {
 
 sub getComments {
     my ( $self, $id ) = @_;
-    croak "Issue ID must be specified." unless ($id);
+    croak "issueId must be specified." unless ($id);
     my $req = RPC::XML::request->new( 'backlog.getComments', $id, );
     my $res = $self->{client}->send_request($req);
     croak "Error backlog.getComments : " . $res->value->{faultString}
@@ -120,11 +125,139 @@ sub getComments {
     return \@comments;
 }
 
-sub countIssue   { croak('Not yet implemented.') }
-sub findIssue    { croak('Not yet implemented.') }
-sub createIssue  { croak('Not yet implemented.') }
-sub updateIssue  { croak('Not yet implemented.') }
-sub switchStatus { croak('Not yet implemented.') }
+sub countIssue {
+    my ( $self, $args ) = @_;
+    my $cond;
+
+    if ( ref($args) eq 'WebService::Backlog::FindCondition' ) {
+        $cond = $args->toCountCond;
+    }
+    elsif ( ref($args) eq 'HASH' ) {
+        $cond = WebService::Backlog::FindCondition->new($args)->toCountCond;
+    }
+    else {
+        croak(
+'args must be WebService::Backlog::FindCondition object or reference to hash. ['
+              . ref($args)
+              . ']' );
+    }
+    croak("projectId must be specified.") unless ( $cond->{projectId} );
+
+    my $req = RPC::XML::request->new( 'backlog.countIssue', $cond );
+    my $res = $self->{client}->send_request($req);
+    croak "Error backlog.countIssue : " . $res->value->{faultString}
+      if ( $res->is_fault );
+
+    return $res->value;
+}
+
+sub findIssue {
+    my ( $self, $args ) = @_;
+    my $cond;
+
+    if ( ref($args) eq 'WebService::Backlog::FindCondition' ) {
+        $cond = $args->toFindCond;
+    }
+    elsif ( ref($args) eq 'HASH' ) {
+        $cond = WebService::Backlog::FindCondition->new($args)->toFindCond;
+    }
+    else {
+        croak(
+'args must be WebService::Backlog::FindCondition object or reference to hash. ['
+              . ref($args)
+              . ']' );
+    }
+    croak("projectId must be specified.") unless ( $cond->{projectId} );
+
+    my $req = RPC::XML::request->new( 'backlog.findIssue', $cond );
+    my $res = $self->{client}->send_request($req);
+    croak "Error backlog.findIssue : " . $res->value->{faultString}
+      if ( $res->is_fault );
+
+    my @issues = ();
+    for my $issue ( @{ $res->value } ) {
+        push( @issues, WebService::Backlog::Issue->new($issue) );
+    }
+    return \@issues;
+}
+
+sub createIssue {
+    my ( $self, $arg ) = @_;
+    my $issue;
+    if ( ref($arg) eq 'WebService::Backlog::CreateIssue' ) {
+        $issue = $arg;
+    }
+    elsif ( ref($arg) eq 'HASH' ) {
+        $issue = WebService::Backlog::CreateIssue->new($arg);
+    }
+    else {
+        croak(
+'arg must be WebService::Backlog::CreateIssue object or reference to hash. ['
+              . ref($arg)
+              . ']' );
+    }
+    croak("projectId must be specified.") unless ( $issue->projectId );
+    croak("summary must be specified.")    unless ( $issue->summary );
+
+    my $req = RPC::XML::request->new( 'backlog.createIssue', $issue->hash );
+    my $res = $self->{client}->send_request($req);
+    croak "Error backlog.createIssue : " . $res->value->{faultString}
+      if ( $res->is_fault );
+
+    return WebService::Backlog::Issue->new( $res->value );
+}
+
+sub updateIssue {
+    my ( $self, $arg ) = @_;
+    my $issue;
+    if ( ref($arg) eq 'WebService::Backlog::UpdateIssue' ) {
+        $issue = $arg;
+    }
+    elsif ( ref($arg) eq 'HASH' ) {
+        $issue = WebService::Backlog::UpdateIssue->new($arg);
+    }
+    else {
+        croak(
+'arg must be WebService::Backlog::UpdateIssue object or reference to hash. ['
+              . ref($arg)
+              . ']' );
+    }
+    croak("key must be specified.")     unless ( $issue->key );
+    croak("summary must be specified.") unless ( $issue->summary );
+
+    my $req = RPC::XML::request->new( 'backlog.updateIssue', $issue->hash );
+    my $res = $self->{client}->send_request($req);
+    croak "Error backlog.updateIssue : " . $res->value->{faultString}
+      if ( $res->is_fault );
+
+    return WebService::Backlog::Issue->new( $res->value );
+}
+
+sub switchStatus {
+    my ( $self, $arg ) = @_;
+    my $switch;
+    if ( ref($arg) eq 'WebService::Backlog::SwitchStatus' ) {
+        $switch = $arg;
+    }
+    elsif ( ref($arg) eq 'HASH' ) {
+        $switch = WebService::Backlog::SwitchStatus->new($arg);
+    }
+    else {
+        croak(
+'arg must be WebService::Backlog::SwitchStatus object or reference to hash. ['
+              . ref($arg)
+              . ']' );
+    }
+    croak("key must be specified.")      unless ( $switch->key );
+    croak("StatusId must be specified.") unless ( $switch->statusId );
+
+    my $req = RPC::XML::request->new( 'backlog.switchStatus', $switch->hash );
+    my $res = $self->{client}->send_request($req);
+    croak "Error backlog.switchStatus : " . $res->value->{faultString}
+      if ( $res->is_fault );
+
+    return WebService::Backlog::Issue->new( $res->value );
+}
 
 1;
 __END__

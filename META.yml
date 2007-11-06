@@ -19,4 +19,4 @@ requires:
   Carp: 0
   Class::Accessor::Fast: 0
   RPC::XML: 0
-version: 0.01_01
+version: 0.01_02

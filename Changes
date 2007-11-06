@@ -1,4 +1,7 @@
 Revision history for Perl extension WebService::Backlog
 
-0.01  Mon Nov  5 13:43:01 2007
-        - original version
+0.01_02  2007-11-06 14:22:11 JST
+		 - implement all methods.
+
+0.01_01  2007-11-05 13:43:01 JST
+		 - original version
