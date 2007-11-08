@@ -7,7 +7,6 @@ requires 'Carp';
 requires 'RPC::XML';
 
 build_requires 'Test::More';
-build_requires 'Encode';
 
 use_test_base;
 auto_include;

@@ -2,7 +2,6 @@
 abstract: Perl interface to Backlog.
 author: Ryuzo Yamamoto <yamamoto@nulab.co.jp>
 build_requires: 
-  Encode: 0
   Test::More: 0
 distribution_type: module
 generated_by: Module::Install version 0.67
@@ -19,4 +18,5 @@ requires:
   Carp: 0
   Class::Accessor::Fast: 0
   RPC::XML: 0
-version: 0.01_02
+  perl: 5.8.5
+version: 0.01_03

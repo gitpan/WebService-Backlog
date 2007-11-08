@@ -1,7 +1,11 @@
 package WebService::Backlog;
 
+# $Id: Backlog.pm 569 2007-11-08 01:49:36Z yamamoto $
+
 use strict;
-our $VERSION = '0.01_02';
+use 5.8.5;
+
+our $VERSION = '0.01_03';
 
 use RPC::XML::Client;
 use Carp;
@@ -126,19 +130,19 @@ sub getComments {
 }
 
 sub countIssue {
-    my ( $self, $args ) = @_;
+    my ( $self, $arg ) = @_;
     my $cond;
 
-    if ( ref($args) eq 'WebService::Backlog::FindCondition' ) {
-        $cond = $args->toCountCond;
+    if ( ref($arg) eq 'WebService::Backlog::FindCondition' ) {
+        $cond = $arg->toCountCond;
     }
-    elsif ( ref($args) eq 'HASH' ) {
-        $cond = WebService::Backlog::FindCondition->new($args)->toCountCond;
+    elsif ( ref($arg) eq 'HASH' ) {
+        $cond = WebService::Backlog::FindCondition->new($arg)->toCountCond;
     }
     else {
-        croak(
-'args must be WebService::Backlog::FindCondition object or reference to hash. ['
-              . ref($args)
+        croak(  'arg must be WebService::Backlog::FindCondition object'
+              . ' or reference to hash. ['
+              . ref($arg)
               . ']' );
     }
     croak("projectId must be specified.") unless ( $cond->{projectId} );
@@ -152,19 +156,19 @@ sub countIssue {
 }
 
 sub findIssue {
-    my ( $self, $args ) = @_;
+    my ( $self, $arg ) = @_;
     my $cond;
 
-    if ( ref($args) eq 'WebService::Backlog::FindCondition' ) {
-        $cond = $args->toFindCond;
+    if ( ref($arg) eq 'WebService::Backlog::FindCondition' ) {
+        $cond = $arg->toFindCond;
     }
-    elsif ( ref($args) eq 'HASH' ) {
-        $cond = WebService::Backlog::FindCondition->new($args)->toFindCond;
+    elsif ( ref($arg) eq 'HASH' ) {
+        $cond = WebService::Backlog::FindCondition->new($arg)->toFindCond;
     }
     else {
-        croak(
-'args must be WebService::Backlog::FindCondition object or reference to hash. ['
-              . ref($args)
+        croak(  'arg must be WebService::Backlog::FindCondition object'
+              . ' or reference to hash. ['
+              . ref($arg)
               . ']' );
     }
     croak("projectId must be specified.") unless ( $cond->{projectId} );
@@ -191,13 +195,13 @@ sub createIssue {
         $issue = WebService::Backlog::CreateIssue->new($arg);
     }
     else {
-        croak(
-'arg must be WebService::Backlog::CreateIssue object or reference to hash. ['
+        croak(  'arg must be WebService::Backlog::CreateIssue object'
+              . ' or reference to hash. ['
               . ref($arg)
               . ']' );
     }
     croak("projectId must be specified.") unless ( $issue->projectId );
-    croak("summary must be specified.")    unless ( $issue->summary );
+    croak("summary must be specified.")   unless ( $issue->summary );
 
     my $req = RPC::XML::request->new( 'backlog.createIssue', $issue->hash );
     my $res = $self->{client}->send_request($req);
@@ -217,8 +221,8 @@ sub updateIssue {
         $issue = WebService::Backlog::UpdateIssue->new($arg);
     }
     else {
-        croak(
-'arg must be WebService::Backlog::UpdateIssue object or reference to hash. ['
+        croak(  'arg must be WebService::Backlog::UpdateIssue object'
+              . ' or reference to hash. ['
               . ref($arg)
               . ']' );
     }
@@ -243,8 +247,8 @@ sub switchStatus {
         $switch = WebService::Backlog::SwitchStatus->new($arg);
     }
     else {
-        croak(
-'arg must be WebService::Backlog::SwitchStatus object or reference to hash. ['
+        croak(  'arg must be WebService::Backlog::SwitchStatus object'
+              . ' or reference to hash. ['
               . ref($arg)
               . ']' );
     }
@@ -275,13 +279,26 @@ WebService::Backlog - Perl interface to Backlog.
     password => 'password'
   );
 
+  # get your projects.
+  my $projects  = $backlog->getProjects; # List of objects (WebService::Backlog::Project)
+  for my $project (@{$project}) {
+    print $project->name . "\n";
+  }
+
+  # get assigned issues.
+  my $issues = $backlog->findIssue({
+    projectId => 1, # your project id.
+    assigner  => 2, # your user id.
+  });
+
+  # and more ...
 
 =head1 DESCRIPTION
 
 WebService::Backlog provides interface to Backlog.
 Backlog is a web based project collaboration tool.
 
-For more information on Backlog, visit the Backlog website. http://www.backlog.jp
+For more information on Backlog, visit the Backlog website. http://www.backlog.jp/
 
 =head1 METHODS
 
@@ -323,4 +340,8 @@ it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
+Backlog : http://www.backlog.jp/
+Backlog API : http://www.backlog.jp/api/
+
 =cut
+

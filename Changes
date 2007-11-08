@@ -1,7 +1,11 @@
 Revision history for Perl extension WebService::Backlog
 
+0.01_03  2007-11-08 11:33:16 JST
+		 - Removed "build_requires 'Encode'" from Makefile.PL.
+		 - Added "use 5.8.5" to WebService::Backlog.
+
 0.01_02  2007-11-06 14:22:11 JST
-		 - implement all methods.
+		 - Implement all methods.
 
 0.01_01  2007-11-05 13:43:01 JST
 		 - original version
