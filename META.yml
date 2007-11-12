@@ -17,6 +17,7 @@ no_index:
 requires: 
   Carp: 0
   Class::Accessor::Fast: 0
+  Crypt::SSLeay: 0
   RPC::XML: 0
   perl: 5.8.5
-version: 0.01_03
+version: 0.01_04

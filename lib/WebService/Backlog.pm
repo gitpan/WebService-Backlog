@@ -1,11 +1,11 @@
 package WebService::Backlog;
 
-# $Id: Backlog.pm 569 2007-11-08 01:49:36Z yamamoto $
+# $Id: Backlog.pm 573 2007-11-12 05:42:54Z yamamoto $
 
 use strict;
 use 5.8.5;
 
-our $VERSION = '0.01_03';
+our $VERSION = '0.01_04';
 
 use RPC::XML::Client;
 use Carp;

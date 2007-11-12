@@ -5,6 +5,7 @@ all_from 'lib/WebService/Backlog.pm';
 requires 'Class::Accessor::Fast';
 requires 'Carp';
 requires 'RPC::XML';
+requires 'Crypt::SSLeay';
 
 build_requires 'Test::More';
 
