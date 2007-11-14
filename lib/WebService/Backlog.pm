@@ -1,14 +1,14 @@
 package WebService::Backlog;
 
-# $Id: Backlog.pm 573 2007-11-12 05:42:54Z yamamoto $
+# $Id: Backlog.pm 576 2007-11-14 13:15:31Z yamamoto $
 
 use strict;
-use 5.8.5;
+use 5.008001;
 
-our $VERSION = '0.01_04';
+our $VERSION = '0.02';
 
-use RPC::XML::Client;
 use Carp;
+use RPC::XML::Client;
 
 use WebService::Backlog::Project;
 use WebService::Backlog::Component;
@@ -23,9 +23,9 @@ use WebService::Backlog::SwitchStatus;
 
 sub new {
     my ( $class, %args ) = @_;
-    croak('space must be specified')    unless ( exists $args{space} );
-    croak('username must be specified') unless ( exists $args{username} );
-    croak('password must be specified') unless ( exists $args{password} );
+    croak('space must be specified')    unless ( defined $args{space} );
+    croak('username must be specified') unless ( defined $args{username} );
+    croak('password must be specified') unless ( defined $args{password} );
 
     my $client = RPC::XML::Client->new(
         'https://' . $args{space} . '.backlog.jp/XML-RPC' );

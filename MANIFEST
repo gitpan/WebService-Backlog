@@ -38,3 +38,6 @@ t/06_get_issue.t
 t/07_count_issue.t
 t/08_find_issue.t
 t/09_create_issue.t
+t/10_update_issue.t
+t/11_switch_status.t
+t/12_new.t

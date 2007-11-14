@@ -19,5 +19,5 @@ requires:
   Class::Accessor::Fast: 0
   Crypt::SSLeay: 0
   RPC::XML: 0
-  perl: 5.8.5
-version: 0.01_04
+  perl: 5.8.1
+version: 0.02
