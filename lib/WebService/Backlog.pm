@@ -1,11 +1,11 @@
 package WebService::Backlog;
 
-# $Id: Backlog.pm 576 2007-11-14 13:15:31Z yamamoto $
+# $Id: Backlog.pm 577 2007-12-11 04:54:43Z yamamoto $
 
 use strict;
 use 5.008001;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use Carp;
 use RPC::XML::Client;
@@ -287,8 +287,8 @@ WebService::Backlog - Perl interface to Backlog.
 
   # get assigned issues.
   my $issues = $backlog->findIssue({
-    projectId => 1, # your project id.
-    assigner  => 2, # your user id.
+    projectId  => 1, # your project id.
+    assignerId => 2, # your user id.
   });
 
   # and more ...

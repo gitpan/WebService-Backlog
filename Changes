@@ -1,7 +1,10 @@
 Revision history for Perl extension WebService::Backlog
 
+0.03     2007-12-11 13:45:05 JST
+         - Fixed POD typo. (thanks to Kota Sakoda)
+
 0.02     2007-11-14 22:11:08 JST
-		 - Added some tests.
+         - Added some tests.
 
 0.01_04  2007-11-12 14:42:24 JST
          - Added "requires 'Crypt::SSLeay'" to Makefile.PL.
