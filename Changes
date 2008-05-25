@@ -1,5 +1,8 @@
 Revision history for Perl extension WebService::Backlog
 
+0.04     2008-05-07 21:24:53 JST
+         - Impletemt multi "Category|Version|Milestone".
+         
 0.03     2007-12-11 13:45:05 JST
          - Fixed POD typo. (thanks to Kota Sakoda)
 
