@@ -1,4 +1,4 @@
-package WebService::Backlog::CreateIssue;
+package WebService::Backlog::SwitchStatus;
 
 # $Id$
 
@@ -8,9 +8,8 @@ use warnings;
 use base qw(Class::Accessor::Fast);
 
 my @PARAMS = qw/
-  projectId summary description due_date
-  issueTypeId priorityId componentId resolutionId versionId  milestoneId
-  assignerId
+  key summary statusId
+  resolutionId assignerId comment
   /;
 
 __PACKAGE__->mk_accessors(@PARAMS);
@@ -19,7 +18,7 @@ sub hash {
     my $self = shift;
     my $hash = {};
     for my $p (@PARAMS) {
-        $hash->{$p} = $self->$p if ( defined $self->$p );
+        $hash->{$p} = $self->$p if (defined $self->$p);
     }
     return $hash;
 }

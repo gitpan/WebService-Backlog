@@ -5,7 +5,7 @@ package WebService::Backlog;
 use strict;
 use 5.008001;
 
-our $VERSION = '0.05';
+our $VERSION = '0.04';
 
 use Carp;
 use RPC::XML::Client;
@@ -340,11 +340,8 @@ it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-    Backlog : http://www.backlog.jp/
+Backlog : http://www.backlog.jp/
 Backlog API : http://www.backlog.jp/api/
-
-Source code : http://github.com/dragon3/webservice-backlog/tree/master
-              git://github.com/dragon3/webservice-backlog.git
 
 =cut
 
